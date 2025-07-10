@@ -1,20 +1,18 @@
 <script setup>
-import Navbar from '@/components/Navbar.vue';
+import { defineAsyncComponent } from 'vue';
 import Hero from '@/components/Hero.vue';
-import Education from '@/components/Education.vue';
-import Skills from '@/components/Skills.vue';
-import Projects from '@/components/Projects.vue';
-import Contact from '@/components/Contact.vue';
+
+const Skills = defineAsyncComponent(() => import('@/components/Skills.vue'));
+const Projects = defineAsyncComponent(() => import('@/components/Projects.vue'));
+const Education = defineAsyncComponent(() => import('@/components/Education.vue'));
+const Contact = defineAsyncComponent(() => import('@/components/Contact.vue'));
 </script>
 <template>
-  <div>
-    <Navbar />
-    <main>
-      <Hero />
-      <div v-animate-on-scroll><Education /></div>
-      <div v-animate-on-scroll><Skills /></div>
-      <div v-animate-on-scroll><Projects /></div>
-      <div v-animate-on-scroll><Contact /></div>
-    </main>
-  </div>
+  <main>
+    <Hero />
+    <div v-animate-on-scroll><Skills /></div>
+    <div v-animate-on-scroll><Projects /></div>
+    <div v-animate-on-scroll><Education /></div>
+    <div v-animate-on-scroll><Contact /></div>
+  </main>
 </template>

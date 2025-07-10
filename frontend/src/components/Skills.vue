@@ -1,36 +1,42 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+// REVISI: Tambahkan /index.js di akhir path
+import { getSkillsData } from '/src/api/index.js';
 import SectionTitle from './SectionTitle.vue';
+
 const skills = ref([]);
-  onMounted(async () => {
+
+onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/skills');
-    skills.value = response.data; } catch (error) { console.error(error);
-    }
+    const response = await getSkillsData();
+    skills.value = response.data;
+  } catch (error) {
+    console.error('Gagal mengambil data skills:', error);
+  }
 });
 </script>
 
 <template>
-  <section id="skill" class="bg-gray-50 py-20">
-    <div class="container mx-auto px-6">
-      <SectionTitle title="Keahlian & Teknologi" />
+  <section id="skill" class="relative min-h-screen bg-p3-blue-dark p-4 md:p-8 flex flex-col justify-center overflow-hidden">
+    <div class="absolute top-1/2 -right-20 text-[8rem] md:text-[10rem] font-black text-p3-white/5 select-none z-0 transform -translate-y-1/2 rotate-90 leading-none">
+      ABILITY
+    </div>
 
-      <div class="mt-12 grid grid-cols-2 gap-8 md:grid-cols-4">
-
-        <div
-          v-for="skill in skills"
-          :key="skill.name"
-          class="
-            transform rounded-lg bg-white p-6 text-center shadow-lg
-            transition-transform duration-300 hover:-translate-y-2
-          "
-        >
-          <h3 class="text-xl font-bold text-gray-800">{{ skill.name }}</h3>
-          <p class="mt-2 text-gray-500">{{ skill.level }}</p>
+    <div class="container mx-auto relative">
+      <SectionTitle title="Skills" subtitle="Teknologi yang Dikuasai" />
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
+        <div v-for="skill in skills" :key="skill.name" class="skill-card group">
+          <div class="slash-bg"></div>
+          <h3 class="text-base md:text-xl font-heading text-p3-white relative z-10 transition-colors group-hover:text-p3-white">{{ skill.name }}</h3>
+          <p class="text-sm md:text-base font-body text-p3-gold relative z-10 transition-colors group-hover:text-p3-white">{{ skill.level }}</p>
         </div>
-
       </div>
     </div>
   </section>
 </template>
+<style scoped>
+.skill-card { @apply bg-p3-blue-base/80 p-4 border-l-4 border-p3-blue-light flex flex-col md:flex-row md:items-center md:justify-between relative overflow-hidden transition-all duration-300; clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%); }
+.skill-card:hover { @apply bg-p3-blue-base border-p3-gold -translate-y-1; }
+.slash-bg { @apply absolute top-0 left-0 w-full h-full bg-p3-gold transition-transform duration-300 ease-in-out; transform: translateX(-101%); clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); }
+.skill-card:hover .slash-bg { transform: translateX(0); }
+</style>

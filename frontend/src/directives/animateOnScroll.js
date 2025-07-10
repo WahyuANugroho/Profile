@@ -1,16 +1,18 @@
-// src/directives/animateOnScroll.js
-const animatedScrollObserver = new IntersectionObserver(
-  (entries, observer) => {entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('enter');
-        observer.unobserve(entry.target);
-      }
-    });
-  }
-);
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
 export default {
-mounted(el) {
-  el.classList.add('before-enter');
-  animatedScrollObserver.observe(el);
-}
-}
+  mounted(el) {
+    el.classList.add('reveal-on-scroll');
+    observer.observe(el);
+  },
+  beforeUnmount(el) {
+    observer.unobserve(el);
+  }
+};

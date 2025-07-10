@@ -1,14 +1,84 @@
-/* src/assets/main.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* Style untuk animasi scroll yang akan kita pakai nanti */
-.before-enter {
-  opacity: 0;
-  transform: translateY(100px);
-  transition: all 1s ease-out;
+
+html {
+  scroll-behavior: smooth;
 }
-.enter {
+
+/* Kustomisasi komponen dipusatkan di sini menggunakan layer.
+  Ini adalah cara yang direkomendasikan Tailwind untuk styling komponen kustom.
+*/
+@layer components {
+  /* Style untuk tautan di navigasi samping */
+  .nav-link {
+    @apply text-p3-gray hover:text-p3-white transition-all duration-200 block relative pl-2;
+  }
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 12px solid theme('colors.p3-gold');
+    transition: transform 0.3s ease;
+  }
+  .nav-link:hover::before {
+    animation: nav-marker-appear 0.3s ease forwards;
+  }
+
+  /* Style untuk kartu pada bagian Skills */
+  .skill-card {
+    @apply bg-p3-blue-base/80 p-4 border-l-4 border-p3-blue-light flex flex-col md:flex-row md:items-center md:justify-between relative overflow-hidden transition-all duration-300;
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
+  }
+  .skill-card:hover {
+    @apply bg-p3-blue-base border-p3-gold -translate-y-1;
+  }
+  .skill-card .slash-bg {
+    @apply absolute top-0 left-0 w-full h-full bg-p3-gold;
+    transform: translateX(-101%);
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+  }
+  .skill-card:hover .slash-bg {
+    animation: slash-enter 0.3s ease-in-out forwards;
+  }
+}
+
+@layer utilities {
+  /* Utility class untuk clip-path yang sering digunakan */
+  .clip-p3-card-image {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+  }
+  .clip-p3-card-content {
+    clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Transisi untuk Vue */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Kelas untuk efek 'reveal on scroll' */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal-on-scroll.in-view {
   opacity: 1;
-  transform: translateY(0px);
+  transform: translateY(0);
 }
