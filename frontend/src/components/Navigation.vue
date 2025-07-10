@@ -24,7 +24,7 @@ defineEmits(['close-mobile-menu']);
          class="bg-p3-gold text-p3-blue-dark font-bold py-3 px-4 rounded-sm transition-all duration-300 block text-center text-base md:text-lg transform -skew-x-12 hover:bg-p3-white hover:shadow-lg hover:shadow-p3-gold/20">
         HUBUNGI SAYA
       </a>
-      <p class="text-p3-gray text-xs text-center mt-4 pr-12">&copy; {{ new Date().getFullYear() }}</p>
+      <p class="text-p3-gray text-xs text-center mt-4 pr-12">&copy; {{ new Date().getFullYear() }} Inspired by Persona 3 Reload (ATLUS)</p>
     </div>
   </aside>
 </template>
