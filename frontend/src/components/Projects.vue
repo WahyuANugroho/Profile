@@ -1,22 +1,29 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import SectionTitle from './SectionTitle.vue';
 
+// Variabel untuk menampung data proyek
 const projects = ref([]);
 
-// Logika ini memilih URL API secara otomatis
-const API_URL = import.meta.env.PROD
-    ? '/api/projects'
-    : 'http://localhost:3000/api/projects';
+// URL API untuk endpoint proyek
+const API_URL = 'http://localhost:3000/api/projects';
 
-onMounted(async () => {
-  try {
-    const response = await axios.get(API_URL);
-    projects.value = response.data;
-  } catch (error) {
-    console.error('Gagal mengambil data proyek:', error);
+// Fungsi untuk mendapatkan URL gambar yang benar
+const getImageUrl = (imageName) => {
+  if (!imageName) {
+    return 'https://via.placeholder.com/400x200.png?text=No+Image';
   }
+  return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
+}
+
+// Mengambil data saat komponen pertama kali dimuat
+onMounted(async () => {
+    try {
+        const response = await axios.get(API_URL);
+        projects.value = response.data;
+    } catch (error) {
+        console.error('Gagal mengambil data proyek:', error);
+    }
 });
 </script>
 
@@ -34,15 +41,18 @@ onMounted(async () => {
           :href="project.link"
           target="_blank"
           rel="noopener noreferrer"
-          class="block relative group transform hover:-translate-y-2 transition-transform duration-300 h-[320px] md:h-[350px]"
+
+          class="block relative group transform hover:-translate-y-2 transition-transform duration-300 h-[400px] md:h-[420px]"
         >
-          <div class="absolute top-0 left-0 w-full h-44 md:h-48 overflow-hidden" style="clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);">
+          <div class="absolute top-0 left-0 w-full h-56 md:h-60 overflow-hidden" style="clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);">
+
             <img
-              :src="project.image"
+              :src="getImageUrl(project.image)"
               :alt="'Gambar ' + project.title"
               class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300 bg-p3-blue-dark"
             >
           </div>
+
           <div class="absolute bottom-0 left-0 w-[95%] bg-p3-blue-dark p-4 md:p-6 z-10" style="clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);">
             <h3 class="text-xl md:text-2xl font-heading font-bold text-p3-white mb-2 mt-4 transition-colors group-hover:text-p3-gold">{{ project.title }}</h3>
             <p class="text-p3-gray text-sm md:text-base mb-3 h-10 md:h-12 overflow-hidden">{{ project.description }}</p>
