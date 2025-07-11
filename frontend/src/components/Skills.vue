@@ -1,17 +1,20 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-// REVISI: Tambahkan /index.js di akhir path
-import { getSkillsData } from '/src/api/index.js';
+import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
 
 const skills = ref([]);
 
+const API_URL = import.meta.env.PROD
+    ? '/api/skills'
+    : 'http://localhost:3000/api/skills';
+
 onMounted(async () => {
   try {
-    const response = await getSkillsData();
+    const response = await axios.get(API_URL);
     skills.value = response.data;
   } catch (error) {
-    console.error('Gagal mengambil data skills:', error);
+    console.error('Gagal mengambil data skill:', error);
   }
 });
 </script>
@@ -21,7 +24,6 @@ onMounted(async () => {
     <div class="absolute top-1/2 -right-20 text-[8rem] md:text-[10rem] font-black text-p3-white/5 select-none z-0 transform -translate-y-1/2 rotate-90 leading-none">
       ABILITY
     </div>
-
     <div class="container mx-auto relative">
       <SectionTitle title="Skills" subtitle="Teknologi yang Dikuasai" />
       <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">

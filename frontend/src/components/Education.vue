@@ -1,14 +1,17 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-// REVISI: Tambahkan /index.js di akhir path
-import { getEducationData } from '/src/api/index.js';
+import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
 
 const educationHistory = ref([]);
 
+const API_URL = import.meta.env.PROD
+    ? '/api/education'
+    : 'http://localhost:3000/api/education';
+
 onMounted(async () => {
   try {
-    const response = await getEducationData();
+    const response = await axios.get(API_URL);
     educationHistory.value = response.data;
   } catch (error) {
     console.error('Gagal mengambil data pendidikan:', error);
@@ -21,7 +24,6 @@ onMounted(async () => {
     <div class="absolute -right-8 bottom-8 text-[9rem] md:text-[13rem] font-black text-p3-white/5 select-none z-0 leading-none">
       HISTORY
     </div>
-
     <div class="container mx-auto relative">
       <SectionTitle title="Pendidikan" subtitle="Riwayat Akademis" />
       <div class="relative max-w-3xl mx-auto pl-10 md:pl-16">
@@ -29,7 +31,10 @@ onMounted(async () => {
         <div class="space-y-12">
           <div v-for="(edu, index) in educationHistory" :key="edu.id" class="relative group animate-fade-in-up opacity-0" :style="{ animationDelay: `${index * 200}ms` }">
             <div class="absolute top-1/2 -left-10 md:-left-16 h-0.5 w-10 md:w-16 bg-p3-blue-light/50 group-hover:bg-p3-gold transition-colors duration-300" aria-hidden="true"></div>
-            <div class="absolute top-1/2 -left-10 md:-left-16 w-4 h-4 bg-p3-gold group-hover:bg-p3-white transition-colors duration-300" style="transform: translate(-50%, -50%); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);" aria-hidden="true"></div>
+            <div class="absolute top-1/2 -left-10 md:-left-16 w-4 h-4 bg-p3-gold group-hover:bg-p3-white transition-colors duration-300"
+                 style="transform: translate(-50%, -50%); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);"
+                 aria-hidden="true">
+            </div>
             <div class="bg-p3-blue-base/50 p-6 relative overflow-hidden transition-all duration-300 transform group-hover:bg-p3-blue-base/90 group-hover:shadow-lg group-hover:-translate-y-1" style="clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);">
               <div class="slash-bg"></div>
               <div class="relative z-10">
