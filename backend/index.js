@@ -23,5 +23,9 @@ app.use((req, res, next) => {
     res.status(404).send("Maaf, endpoint tidak ditemukan.");
 });
 
+
+// =================================================================
 // WAJIB ADA: Ekspor 'app' agar Vercel bisa menggunakannya
+// Kita tidak lagi menggunakan app.listen() untuk Vercel
 module.exports = app;
+// =================================================================
