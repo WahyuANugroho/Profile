@@ -6,7 +6,7 @@ import axios from 'axios';
 const projects = ref([]);
 
 // URL API untuk endpoint proyek
-const API_URL = 'http://localhost:3000/api/projects';
+const API_URL = import.meta.env.PROD ? '/api/projects' : 'http://localhost:3000/api/projects';
 
 // Fungsi untuk mendapatkan URL gambar yang benar
 const getImageUrl = (imageName) => {
