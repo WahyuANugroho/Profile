@@ -39,7 +39,5 @@ app.get('/api/projects', async (req, res) => {
     }
 });
 
-// =================================================================
 // WAJIB ADA: Ekspor 'app' agar Vercel bisa menggunakannya
-// =================================================================
 module.exports = app;

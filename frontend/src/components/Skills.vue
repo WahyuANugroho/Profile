@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue'; // Aktifkan jika Anda punya komponen ini
 const skills = ref([]);
@@ -10,8 +11,7 @@ skills.value = (await axios.get(API_URL)).data;
 } catch (error) {
 console.error('Gagal mengambil data skill:', error);
 }
-});
-</script>
+});</script>
 
 <template>
   <section id="skill" class="relative min-h-screen bg-p3-blue-dark p-4 md:p-8 flex flex-col justify-center overflow-hidden">

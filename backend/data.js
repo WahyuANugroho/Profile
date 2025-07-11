@@ -1,12 +1,11 @@
-// src/api/localData.js
-// Berisi data tiruan/lokal untuk Plan B
+// PERBAIKAN: Menggunakan module.exports agar bisa di-require oleh seed.js
 
-export const educationHistory = [
+const educationHistory = [
     { id: 1, period: '2022 - Sekarang', institution: 'Universitas Amikom Yogyakarta', major: 'S1 - Informatika' },
     { id: 2, period: '2019 - 2022', institution: 'SMK Negeri 2 Metro', major: 'Agribisnis Ternak Unggas' }
 ];
 
-export const skills = [
+const skills = [
     { name: 'Vue.js', level: 'Mahir' },
     { name: 'JavaScript', level: 'Mahir' },
     { name: 'Tailwind CSS', level: 'Mahir' },
@@ -15,7 +14,7 @@ export const skills = [
     { name: 'PostgreSQL', level: 'Menengah' },
 ];
 
-export const projects = [
+const projects = [
     {
         title: 'Lucien Avenue',
         image: 'project1.png',
@@ -30,5 +29,6 @@ export const projects = [
         tech: ['Kotlin', 'Llama', 'ONNX'],
         link: 'https://github.com/WahyuANugroho/Elysia_Assistant'
     },
-
 ];
+
+module.exports = { educationHistory, skills, projects };

@@ -3,8 +3,8 @@
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/vite",
-      "config": { "includeFiles": ["../index.js", "../data.js", "../package.json", "../seed.js"] }
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
     },
     {
       "src": "index.js",
@@ -13,12 +13,12 @@
   ],
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/api/(.*)",
       "destination": "/index.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/"
+      "source": "/((?!api/|.*\\..*).*)",
+      "destination": "/frontend/dist/index.html"
     }
   ]
 }

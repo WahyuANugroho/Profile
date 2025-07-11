@@ -1,15 +1,31 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import SectionTitle from './SectionTitle.vue'; // Aktifkan jika Anda punya komponen ini
-const skills = ref([]);
-const API_URL = import.meta.env.PROD ? '/api/skills' : 'http://localhost:3000/api/projects';
-onMounted(async () => {
-try {
-skills.value = (await axios.get(API_URL)).data;
-} catch (error) {
-console.error('Gagal mengambil data skill:', error);
+import SectionTitle from './SectionTitle.vue';
+
+// PERBAIKAN: Nama variabel diubah menjadi 'projects'
+const projects = ref([]);
+
+// PERBAIKAN: URL API diubah ke '/api/projects'
+const API_URL = import.meta.env.PROD ? '/api/projects' : 'http://localhost:3000/api/projects';
+
+// Fungsi untuk path gambar (ini sudah benar)
+const getImageUrl = (imageName) => {
+  if (!imageName) {
+    return 'https://via.placeholder.com/400x200.png?text=No+Image';
+  }
+  return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
 }
+
+onMounted(async () => {
+    try {
+        // PERBAIKAN: Variabel diubah menjadi 'projects'
+        const response = await axios.get(API_URL);
+        projects.value = response.data;
+    } catch (error) {
+        // PERBAIKAN: Pesan error disesuaikan
+        console.error('Gagal mengambil data proyek:', error);
+    }
 });
 </script>
 
