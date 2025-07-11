@@ -1,29 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
-// Variabel untuk menampung data proyek
-const projects = ref([]);
-
-// URL API untuk endpoint proyek
-const API_URL = import.meta.env.PROD ? '/api/projects' : 'http://localhost:3000/api/projects';
-
-// Fungsi untuk mendapatkan URL gambar yang benar
-const getImageUrl = (imageName) => {
-  if (!imageName) {
-    return 'https://via.placeholder.com/400x200.png?text=No+Image';
-  }
-  return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
-}
-
-// Mengambil data saat komponen pertama kali dimuat
+import SectionTitle from './SectionTitle.vue'; // Aktifkan jika Anda punya komponen ini
+const skills = ref([]);
+const API_URL = import.meta.env.PROD ? '/api/skills' : 'http://localhost:3000/api/projects';
 onMounted(async () => {
-    try {
-        const response = await axios.get(API_URL);
-        projects.value = response.data;
-    } catch (error) {
-        console.error('Gagal mengambil data proyek:', error);
-    }
+try {
+skills.value = (await axios.get(API_URL)).data;
+} catch (error) {
+console.error('Gagal mengambil data skill:', error);
+}
 });
 </script>
 
