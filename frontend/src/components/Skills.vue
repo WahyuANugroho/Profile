@@ -1,17 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import SectionTitle from './SectionTitle.vue'; // Aktifkan jika Anda punya komponen ini
-const skills = ref([]);
-const API_URL = import.meta.env.PROD ? '/api/skills' : 'http://localhost:3000/api/skills';
-onMounted(async () => {
-try {
-skills.value = (await axios.get(API_URL)).data;
-} catch (error) {
-console.error('Gagal mengambil data skill:', error);
-}
-});</script>
+import { ref } from 'vue';
+import SectionTitle from './SectionTitle.vue';
+// PERBAIKAN: Impor data langsung dari file lokal
+import { skills as localSkills } from '../data.js';
 
+const skills = ref(localSkills);
+</script>
 <template>
   <section id="skill" class="relative min-h-screen bg-p3-blue-dark p-4 md:p-8 flex flex-col justify-center overflow-hidden">
     <div class="absolute top-1/2 -right-20 text-[8rem] md:text-[10rem] font-black text-p3-white/5 select-none z-0 transform -translate-y-1/2 rotate-90 leading-none">

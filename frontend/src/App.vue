@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import Navigation from './components/Navigation.vue';
 import LoadingScreen from './components/LoadingScreen.vue';

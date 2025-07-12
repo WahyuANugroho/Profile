@@ -1,34 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref } from 'vue';
 import SectionTitle from './SectionTitle.vue';
+// PERBAIKAN: Impor data langsung dari file lokal
+import { projects as localProjects } from '../data.js';
 
-// PERBAIKAN: Nama variabel diubah menjadi 'projects'
-const projects = ref([]);
+const projects = ref(localProjects);
 
-// PERBAIKAN: URL API diubah ke '/api/projects'
-const API_URL = import.meta.env.PROD ? '/api/projects' : 'http://localhost:3000/api/projects';
-
-// Fungsi untuk path gambar (ini sudah benar)
+// Fungsi untuk memperbaiki path gambar lokal
 const getImageUrl = (imageName) => {
   if (!imageName) {
-    return 'https://via.placeholder.com/400x200.png?text=No+Image';
+    return '';
   }
   return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
 }
-
-onMounted(async () => {
-    try {
-        // PERBAIKAN: Variabel diubah menjadi 'projects'
-        const response = await axios.get(API_URL);
-        projects.value = response.data;
-    } catch (error) {
-        // PERBAIKAN: Pesan error disesuaikan
-        console.error('Gagal mengambil data proyek:', error);
-    }
-});
 </script>
-
 <template>
   <section id="proyek" class="relative min-h-screen bg-p3-blue-base p-4 md:p-8 flex flex-col justify-center overflow-hidden">
     <div class="absolute -left-12 top-10 text-[10rem] md:text-[14rem] font-black text-p3-blue-dark/40 select-none z-0 leading-none">
