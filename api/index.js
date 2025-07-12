@@ -20,6 +20,26 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Backend is running' });
 });
 
+// Temporary database initialization endpoint (remove after first use)
+app.post('/api/init-db', async (req, res) => {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    
+    // Read the SQL schema file
+    const schemaPath = path.join(__dirname, 'database.sql');
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+    
+    // Execute the schema
+    await pool.query(schema);
+    
+    res.json({ message: 'Database initialized successfully!' });
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    res.status(500).json({ error: 'Failed to initialize database' });
+  }
+});
+
 // Get all projects
 app.get('/api/projects', async (req, res) => {
   try {
