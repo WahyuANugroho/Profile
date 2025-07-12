@@ -210,6 +210,7 @@ app.use('*', (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 
+// For Vercel serverless functions
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
@@ -217,4 +218,5 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+// Export for Vercel
 module.exports = app; 
