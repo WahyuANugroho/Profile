@@ -55,8 +55,8 @@ INSERT INTO skills (name, level) VALUES
 ('Express.js', 'Menengah'),
 ('PostgreSQL', 'Menengah');
 
--- Create indexes for better performance
-CREATE INDEX idx_projects_created_at ON projects(created_at);
-CREATE INDEX idx_skills_name ON skills(name);
-CREATE INDEX idx_education_period ON education(period);
-CREATE INDEX idx_contact_messages_created_at ON contact_messages(created_at); 
+-- Create indexes for better performance (if not exists)
+CREATE INDEX IF NOT EXISTS idx_projects_created_at ON projects(created_at);
+CREATE INDEX IF NOT EXISTS idx_skills_name ON skills(name);
+CREATE INDEX IF NOT EXISTS idx_education_period ON education(period);
+CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages(created_at); 
