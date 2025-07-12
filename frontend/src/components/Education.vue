@@ -1,10 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
 // PERBAIKAN: Impor data langsung dari file lokal
 import { educationHistory as localEducationHistory } from '../data.js';
 
 const educationHistory = ref(localEducationHistory);
+
+// URL API untuk produksi (Vercel) dan pengembangan (lokal)
+const API_URL = import.meta.env.PROD ? '/api/education' : 'http://localhost:3001/api/education';
+
+onMounted(async () => {
+  try {
+    // RENCANA A: Coba ambil data dari API
+    console.log('Mencoba mengambil data pendidikan dari API...');
+    const response = await axios.get(API_URL);
+    educationHistory.value = response.data;
+    console.log('Berhasil mengambil data pendidikan dari API.');
+  } catch (error) {
+    // RENCANA B: Jika API gagal, gunakan data lokal
+    console.warn('Gagal mengambil data dari API. Beralih ke data lokal.', error);
+    educationHistory.value = localEducationHistory;
+  }
+});
 </script>
 
 <template>

@@ -1,18 +1,43 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// PERBAIKAN: Impor data langsung dari file lokal
+// Impor data lokal sebagai cadangan
 import { projects as localProjects } from '../data.js';
 
-const projects = ref(localProjects);
+const projects = ref([]);
 
-// Fungsi untuk memperbaiki path gambar lokal
+// URL API untuk produksi (Vercel) dan pengembangan (lokal)
+const API_URL = import.meta.env.PROD ? '/api/projects' : 'http://localhost:3001/api/projects';
+
+// Fungsi untuk mendapatkan URL gambar
 const getImageUrl = (imageName) => {
   if (!imageName) {
-    return '';
+    return 'https://via.placeholder.com/400x200.png?text=No+Image';
   }
   return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
-}
+};
+
+onMounted(async () => {
+  try {
+    // RENCANA A: Coba ambil data dari API
+    console.log('Mencoba mengambil data proyek dari API...');
+    const response = await axios.get(API_URL);
+    // Transform API data to match local format
+    projects.value = response.data.map(project => ({
+      title: project.title,
+      image: project.image_url ? project.image_url.split('/').pop() : 'project1.png',
+      description: project.description,
+      tech: project.technologies || [],
+      link: project.github_url || project.live_url || '#'
+    }));
+    console.log('Berhasil mengambil data proyek dari API.');
+  } catch (error) {
+    // RENCANA B: Jika API gagal, gunakan data lokal
+    console.warn('Gagal mengambil data dari API. Beralih ke data lokal.', error);
+    projects.value = localProjects;
+  }
+});
 </script>
 <template>
   <section id="proyek" class="relative min-h-screen bg-p3-blue-base p-4 md:p-8 flex flex-col justify-center overflow-hidden">

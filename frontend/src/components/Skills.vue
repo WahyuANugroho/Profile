@@ -1,10 +1,35 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
 // PERBAIKAN: Impor data langsung dari file lokal
 import { skills as localSkills } from '../data.js';
 
 const skills = ref(localSkills);
+
+// URL API untuk produksi (Vercel) dan pengembangan (lokal)
+const API_URL = import.meta.env.PROD ? '/api/skills' : 'http://localhost:3001/api/skills';
+
+onMounted(async () => {
+  try {
+    // RENCANA A: Coba ambil data dari API
+    console.log('Mencoba mengambil data skills dari API...');
+    const response = await axios.get(API_URL);
+    // Transform API data to match local format
+    skills.value = response.data.map(skill => ({
+      name: skill.name,
+      level: skill.proficiency === 5 ? 'Mahir' :
+             skill.proficiency === 4 ? 'Mahir' :
+             skill.proficiency === 3 ? 'Menengah' :
+             skill.proficiency === 2 ? 'Pemula' : 'Pemula'
+    }));
+    console.log('Berhasil mengambil data skills dari API.');
+  } catch (error) {
+    // RENCANA B: Jika API gagal, gunakan data lokal
+    console.warn('Gagal mengambil data dari API. Beralih ke data lokal.', error);
+    skills.value = localSkills;
+  }
+});
 </script>
 <template>
   <section id="skill" class="relative min-h-screen bg-p3-blue-dark p-4 md:p-8 flex flex-col justify-center overflow-hidden">
