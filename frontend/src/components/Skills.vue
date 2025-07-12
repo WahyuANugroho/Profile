@@ -15,14 +15,8 @@ onMounted(async () => {
     // RENCANA A: Coba ambil data dari API
     console.log('Mencoba mengambil data skills dari API...');
     const response = await axios.get(API_URL);
-    // Transform API data to match local format
-    skills.value = response.data.map(skill => ({
-      name: skill.name,
-      level: skill.proficiency === 5 ? 'Mahir' :
-             skill.proficiency === 4 ? 'Mahir' :
-             skill.proficiency === 3 ? 'Menengah' :
-             skill.proficiency === 2 ? 'Pemula' : 'Pemula'
-    }));
+        // API data already matches local format
+    skills.value = response.data;
     console.log('Berhasil mengambil data skills dari API.');
   } catch (error) {
     // RENCANA B: Jika API gagal, gunakan data lokal

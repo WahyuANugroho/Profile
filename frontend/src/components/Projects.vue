@@ -23,14 +23,8 @@ onMounted(async () => {
     // RENCANA A: Coba ambil data dari API
     console.log('Mencoba mengambil data proyek dari API...');
     const response = await axios.get(API_URL);
-    // Transform API data to match local format
-    projects.value = response.data.map(project => ({
-      title: project.title,
-      image: project.image_url ? project.image_url.split('/').pop() : 'project1.png',
-      description: project.description,
-      tech: project.technologies || [],
-      link: project.github_url || project.live_url || '#'
-    }));
+    // API data already matches local format
+    projects.value = response.data;
     console.log('Berhasil mengambil data proyek dari API.');
   } catch (error) {
     // RENCANA B: Jika API gagal, gunakan data lokal

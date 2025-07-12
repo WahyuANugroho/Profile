@@ -2,15 +2,20 @@
 
 A Node.js/Express.js backend API integrated with Neon PostgreSQL database for the portfolio profile application.
 
-## Features
+## 🚀 Features
 
-- RESTful API endpoints for projects, skills, and contact messages
+- RESTful API endpoints for projects, skills, education, and contact messages
 - PostgreSQL database integration with Neon
 - CORS enabled for frontend integration
 - Error handling and validation
 - Ready for Vercel deployment
+- Database initialization script
+- Health check endpoint
 
-## API Endpoints
+## 📋 API Endpoints
+
+### Health Check
+- `GET /api/health` - Health check endpoint
 
 ### Projects
 - `GET /api/projects` - Get all projects
@@ -19,48 +24,47 @@ A Node.js/Express.js backend API integrated with Neon PostgreSQL database for th
 - `PUT /api/projects/:id` - Update project
 - `DELETE /api/projects/:id` - Delete project
 
-### Education
-- `GET /api/education` - Get all education history
-- `POST /api/education` - Create new education entry
-
 ### Skills
 - `GET /api/skills` - Get all skills
 - `POST /api/skills` - Create new skill
 
+### Education
+- `GET /api/education` - Get all education history
+- `POST /api/education` - Create new education entry
+
 ### Contact
 - `POST /api/contact` - Submit contact form
 
-### Health Check
-- `GET /api/health` - Health check endpoint
+### Database (Temporary)
+- `POST /api/init-db` - Initialize database schema (remove after first use)
 
-## Setup
+## 🛠️ Setup
 
-1. Install dependencies:
+### 1. Install Dependencies
 ```bash
 npm install
 ```
 
-2. Create a `.env` file based on `env.example`:
+### 2. Environment Configuration
 ```bash
+# Copy environment example
 cp env.example .env
-```
 
-3. Add your Neon database connection string to `.env`:
-```
+# Edit .env and add your Neon connection string
 DATABASE_URL=postgresql://username:password@host:port/database
 ```
 
-4. Run the database schema:
-```sql
--- Execute the contents of database.sql in your Neon database
+### 3. Initialize Database
+```bash
+npm run init-db
 ```
 
-5. Start the development server:
+### 4. Start Development Server
 ```bash
 npm run dev
 ```
 
-## Database Schema
+## 🗄️ Database Schema
 
 The application uses four main tables:
 
@@ -69,27 +73,108 @@ The application uses four main tables:
 - **education**: Store education history with period, institution, and major
 - **contact_messages**: Store contact form submissions
 
-## Deployment
+## 🌐 Deployment
 
 ### Vercel Deployment
 
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard:
-   - `DATABASE_URL`: Your Neon database connection string
-4. Deploy
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Add Express.js backend with Neon integration"
+   git push origin main
+   ```
+
+2. **Deploy to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Add environment variables:
+     - `DATABASE_URL`: Your Neon connection string
+     - `NODE_ENV`: `production`
+
+3. **Initialize Production Database**
+   ```bash
+   # Call the initialization endpoint
+   curl -X POST https://your-domain.vercel.app/api/init-db
+   ```
+
+4. **Remove Temporary Endpoint**
+   - After successful initialization, remove `/api/init-db` endpoint for security
 
 ### Environment Variables
 
+#### Required for Production
 - `DATABASE_URL`: Neon PostgreSQL connection string
-- `PORT`: Server port (optional, defaults to 3001)
-- `NODE_ENV`: Environment (development/production)
+- `NODE_ENV`: Set to `production`
 
-## Development
+#### Optional
+- `PORT`: Server port (Vercel handles this automatically)
+
+## 🔧 Development
 
 - `npm run dev`: Start development server with nodemon
 - `npm start`: Start production server
+- `npm run init-db`: Initialize database schema
 
-## Database Connection
+## 🧪 Testing
 
-The application automatically handles SSL connections for production environments when connecting to Neon database. 
+### Local Testing
+```bash
+# Health check
+curl http://localhost:3001/api/health
+
+# Get projects
+curl http://localhost:3001/api/projects
+
+# Get skills
+curl http://localhost:3001/api/skills
+
+# Get education
+curl http://localhost:3001/api/education
+```
+
+### Production Testing
+```bash
+# Replace with your actual domain
+curl https://your-domain.vercel.app/api/health
+curl https://your-domain.vercel.app/api/projects
+```
+
+## 🔒 Security Considerations
+
+1. **Environment Variables**: Never commit sensitive data to Git
+2. **Database Access**: Use connection pooling and proper SSL
+3. **CORS**: Configure CORS properly for production
+4. **Input Validation**: Validate all API inputs
+5. **Remove Temporary Endpoints**: Remove `/api/init-db` after use
+
+## 🚨 Troubleshooting
+
+### Database Connection Issues
+1. Verify your `DATABASE_URL` is correct
+2. Ensure your Neon database is accessible
+3. Check that SSL is properly configured
+
+### Build Failures
+1. Check that all dependencies are in `package.json`
+2. Verify Node.js version compatibility
+3. Check build logs in Vercel dashboard
+
+### API Not Working
+1. Verify the API routes are correct
+2. Check CORS configuration
+3. Test endpoints individually
+
+## 📊 Performance Optimization
+
+1. **Database Indexes**: Already included in the schema
+2. **Connection Pooling**: Configured in the Express app
+3. **Caching**: Consider adding Redis for caching
+4. **CDN**: Vercel provides global CDN automatically
+
+## 🔗 Links
+
+- **Frontend**: Vue.js portfolio application
+- **Database**: Neon PostgreSQL
+- **Deployment**: Vercel
+- **Documentation**: This README 

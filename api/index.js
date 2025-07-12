@@ -9,15 +9,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Database connection
+// Database connection with proper SSL configuration for Neon
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl: { rejectUnauthorized: false }, // Always use SSL for Neon
 });
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Backend is running' });
+  res.json({ status: 'OK', message: 'Backend is running', timestamp: new Date().toISOString() });
 });
 
 // Temporary database initialization endpoint (remove after first use)
@@ -36,7 +36,7 @@ app.post('/api/init-db', async (req, res) => {
     res.json({ message: 'Database initialized successfully!' });
   } catch (error) {
     console.error('Error initializing database:', error);
-    res.status(500).json({ error: 'Failed to initialize database' });
+    res.status(500).json({ error: 'Failed to initialize database', details: error.message });
   }
 });
 
@@ -71,11 +71,11 @@ app.get('/api/projects/:id', async (req, res) => {
 // Create new project
 app.post('/api/projects', async (req, res) => {
   try {
-    const { title, description, technologies, image_url, github_url, live_url } = req.body;
+    const { title, image, description, tech, link } = req.body;
     
     const result = await pool.query(
-      'INSERT INTO projects (title, description, technologies, image_url, github_url, live_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [title, description, technologies, image_url, github_url, live_url]
+      'INSERT INTO projects (title, image, description, tech, link) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [title, image, description, tech, link]
     );
     
     res.status(201).json(result.rows[0]);
@@ -89,11 +89,11 @@ app.post('/api/projects', async (req, res) => {
 app.put('/api/projects/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, technologies, image_url, github_url, live_url } = req.body;
+    const { title, image, description, tech, link } = req.body;
     
     const result = await pool.query(
-      'UPDATE projects SET title = $1, description = $2, technologies = $3, image_url = $4, github_url = $5, live_url = $6, updated_at = NOW() WHERE id = $7 RETURNING *',
-      [title, description, technologies, image_url, github_url, live_url, id]
+      'UPDATE projects SET title = $1, image = $2, description = $3, tech = $4, link = $5, updated_at = NOW() WHERE id = $6 RETURNING *',
+      [title, image, description, tech, link, id]
     );
     
     if (result.rows.length === 0) {
@@ -138,11 +138,11 @@ app.get('/api/skills', async (req, res) => {
 // Create new skill
 app.post('/api/skills', async (req, res) => {
   try {
-    const { name, category, proficiency } = req.body;
+    const { name, level } = req.body;
     
     const result = await pool.query(
-      'INSERT INTO skills (name, category, proficiency) VALUES ($1, $2, $3) RETURNING *',
-      [name, category, proficiency]
+      'INSERT INTO skills (name, level) VALUES ($1, $2) RETURNING *',
+      [name, level]
     );
     
     res.status(201).json(result.rows[0]);
@@ -213,6 +213,7 @@ const PORT = process.env.PORT || 3001;
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/api/health`);
   });
 }
 
