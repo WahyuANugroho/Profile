@@ -4,7 +4,6 @@ const cors = require('cors');
 const { neon } = require('@neondatabase/serverless');
 
 const app = express();
-const port = process.env.PORT || 3001;
 const sql = neon(process.env.DATABASE_URL);
 
 app.use(cors());
@@ -45,7 +44,5 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Backend API listening at http://localhost:${port}`);
-}); 
+// Export the app for Vercel
+module.exports = app; 
