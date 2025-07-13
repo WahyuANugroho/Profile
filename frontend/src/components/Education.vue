@@ -9,11 +9,13 @@ const educationHistory = ref([]);
 const isLoading = ref(true);
 const error = ref(null);
 
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+
 onMounted(async () => {
   isLoading.value = true;
   try {
     console.log('Fetching education data from backend...');
-    const response = await axios.get('http://localhost:3001/api/education');
+    const response = await axios.get(`${API_URL}/education`);
     educationHistory.value = response.data;
     console.log('Education data loaded from backend:', response.data);
   } catch (err) {
