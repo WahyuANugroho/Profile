@@ -1,8 +1,9 @@
 const { neon } = require('@neondatabase/serverless');
 
-const sql = neon(process.env.DATABASE_URL_CUSTOM || process.env.DATABASE_URL);
+const sql = neon(process.env.DATABASE_URL);
 
 module.exports = async (req, res) => {
+  console.log('API request:', req.url, req.method);
   // Health check
   if (req.url === '/' && req.method === 'GET') {
     res.status(200).json({ status: 'Backend API is running!' });
@@ -43,5 +44,5 @@ module.exports = async (req, res) => {
   }
 
   // Not found
-  res.status(404).json({ error: 'Not found' });
+  res.status(404).json({ error: 'Not found', path: req.url });
 }; 
