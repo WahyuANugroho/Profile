@@ -8,7 +8,12 @@ import DateHud from './components/DateHud.vue';
 const isLoading = ref(true);
 const isMobileMenuOpen = ref(false);
 
-onMounted(() => { setTimeout(() => { isLoading.value = false; }, 2500); });
+onMounted(() => {
+  // Show loading screen for at least 2.5 seconds
+  setTimeout(() => { 
+    isLoading.value = false; 
+  }, 2500);
+});
 </script>
 
 <template>

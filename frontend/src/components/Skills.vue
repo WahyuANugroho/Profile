@@ -2,26 +2,27 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// PERBAIKAN: Impor data langsung dari file lokal
+// Fallback data
 import { skills as localSkills } from '../data.js';
 
-const skills = ref(localSkills);
-
-// URL API untuk produksi (Vercel) dan pengembangan (lokal)
-const API_URL = import.meta.env.PROD ? '/api/skills' : 'http://localhost:3001/api/skills';
+const skills = ref([]);
+const isLoading = ref(true);
+const error = ref(null);
 
 onMounted(async () => {
+  isLoading.value = true;
   try {
-    // RENCANA A: Coba ambil data dari API
-    console.log('Mencoba mengambil data skills dari API...');
-    const response = await axios.get(API_URL);
-        // API data already matches local format
+    console.log('Fetching skills data from backend...');
+    const response = await axios.get('http://localhost:3001/api/skills');
     skills.value = response.data;
-    console.log('Berhasil mengambil data skills dari API.');
-  } catch (error) {
-    // RENCANA B: Jika API gagal, gunakan data lokal
-    console.warn('Gagal mengambil data dari API. Beralih ke data lokal.', error);
+    console.log('Skills data loaded from backend:', response.data);
+  } catch (err) {
+    console.warn('Backend not available, using local data:', err.message);
+    error.value = err.message;
+    // Fallback to local data
     skills.value = localSkills;
+  } finally {
+    isLoading.value = false;
   }
 });
 </script>
@@ -32,8 +33,18 @@ onMounted(async () => {
     </div>
     <div class="container mx-auto relative">
       <SectionTitle title="Skills" subtitle="Teknologi yang Dikuasai" />
-      <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
-        <div v-for="skill in skills" :key="skill.name" class="skill-card group">
+      <div v-if="isLoading" class="text-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-p3-gold mx-auto"></div>
+        <p class="text-p3-gray mt-2">Loading skills...</p>
+      </div>
+      <div v-else-if="error && skills.length === 0" class="text-center py-8">
+        <p class="text-red-400">Error loading skills: {{ error }}</p>
+      </div>
+      <div v-else-if="skills.length === 0" class="text-center py-8">
+        <p class="text-p3-gray">No skills found.</p>
+      </div>
+      <div v-else class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
+        <div v-for="skill in skills" :key="skill.id || skill.name" class="skill-card group">
           <div class="slash-bg"></div>
           <h3 class="text-base md:text-xl font-heading text-p3-white relative z-10 transition-colors group-hover:text-p3-white">{{ skill.name }}</h3>
           <p class="text-sm md:text-base font-body text-p3-gold relative z-10 transition-colors group-hover:text-p3-white">{{ skill.level }}</p>

@@ -2,15 +2,14 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// Impor data lokal sebagai cadangan
+// Fallback data
 import { projects as localProjects } from '../data.js';
 
 const projects = ref([]);
+const isLoading = ref(true);
+const error = ref(null);
 
-// URL API untuk produksi (Vercel) dan pengembangan (lokal)
-const API_URL = import.meta.env.PROD ? '/api/projects' : 'http://localhost:3001/api/projects';
-
-// Fungsi untuk mendapatkan URL gambar
+// Function to get image URL
 const getImageUrl = (imageName) => {
   if (!imageName) {
     return 'https://via.placeholder.com/400x200.png?text=No+Image';
@@ -19,17 +18,19 @@ const getImageUrl = (imageName) => {
 };
 
 onMounted(async () => {
+  isLoading.value = true;
   try {
-    // RENCANA A: Coba ambil data dari API
-    console.log('Mencoba mengambil data proyek dari API...');
-    const response = await axios.get(API_URL);
-    // API data already matches local format
+    console.log('Fetching projects data from backend...');
+    const response = await axios.get('http://localhost:3001/api/projects');
     projects.value = response.data;
-    console.log('Berhasil mengambil data proyek dari API.');
-  } catch (error) {
-    // RENCANA B: Jika API gagal, gunakan data lokal
-    console.warn('Gagal mengambil data dari API. Beralih ke data lokal.', error);
+    console.log('Projects data loaded from backend:', response.data);
+  } catch (err) {
+    console.warn('Backend not available, using local data:', err.message);
+    error.value = err.message;
+    // Fallback to local data
     projects.value = localProjects;
+  } finally {
+    isLoading.value = false;
   }
 });
 </script>
@@ -40,25 +41,32 @@ onMounted(async () => {
     </div>
     <div class="container mx-auto relative">
       <SectionTitle title="Proyek" subtitle="Karya Pilihan" />
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
+      <div v-if="isLoading" class="text-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-p3-gold mx-auto"></div>
+        <p class="text-p3-gray mt-2">Loading projects...</p>
+      </div>
+      <div v-else-if="error && projects.length === 0" class="text-center py-8">
+        <p class="text-red-400">Error loading projects: {{ error }}</p>
+      </div>
+      <div v-else-if="projects.length === 0" class="text-center py-8">
+        <p class="text-p3-gray">No projects found.</p>
+      </div>
+      <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-12">
         <a
           v-for="project in projects"
-          :key="project.title"
+          :key="project.id || project.title"
           :href="project.link"
           target="_blank"
           rel="noopener noreferrer"
-
           class="block relative group transform hover:-translate-y-2 transition-transform duration-300 h-[400px] md:h-[420px]"
         >
           <div class="absolute top-0 left-0 w-full h-56 md:h-60 overflow-hidden" style="clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);">
-
             <img
               :src="getImageUrl(project.image)"
               :alt="'Gambar ' + project.title"
               class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300 bg-p3-blue-dark"
             >
           </div>
-
           <div class="absolute bottom-0 left-0 w-[95%] bg-p3-blue-dark p-4 md:p-6 z-10" style="clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);">
             <h3 class="text-xl md:text-2xl font-heading font-bold text-p3-white mb-2 mt-4 transition-colors group-hover:text-p3-gold">{{ project.title }}</h3>
             <p class="text-p3-gray text-sm md:text-base mb-3 h-10 md:h-12 overflow-hidden">{{ project.description }}</p>

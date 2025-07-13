@@ -2,25 +2,27 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// PERBAIKAN: Impor data langsung dari file lokal
+// Fallback data
 import { educationHistory as localEducationHistory } from '../data.js';
 
-const educationHistory = ref(localEducationHistory);
-
-// URL API untuk produksi (Vercel) dan pengembangan (lokal)
-const API_URL = import.meta.env.PROD ? '/api/education' : 'http://localhost:3001/api/education';
+const educationHistory = ref([]);
+const isLoading = ref(true);
+const error = ref(null);
 
 onMounted(async () => {
+  isLoading.value = true;
   try {
-    // RENCANA A: Coba ambil data dari API
-    console.log('Mencoba mengambil data pendidikan dari API...');
-    const response = await axios.get(API_URL);
+    console.log('Fetching education data from backend...');
+    const response = await axios.get('http://localhost:3001/api/education');
     educationHistory.value = response.data;
-    console.log('Berhasil mengambil data pendidikan dari API.');
-  } catch (error) {
-    // RENCANA B: Jika API gagal, gunakan data lokal
-    console.warn('Gagal mengambil data dari API. Beralih ke data lokal.', error);
+    console.log('Education data loaded from backend:', response.data);
+  } catch (err) {
+    console.warn('Backend not available, using local data:', err.message);
+    error.value = err.message;
+    // Fallback to local data
     educationHistory.value = localEducationHistory;
+  } finally {
+    isLoading.value = false;
   }
 });
 </script>
@@ -35,7 +37,17 @@ onMounted(async () => {
       <div class="relative max-w-3xl mx-auto pl-10 md:pl-16">
         <div class="absolute top-0 left-0 h-full w-1 bg-p3-blue-light/20"></div>
         <div class="space-y-12">
-          <div v-for="(edu, index) in educationHistory" :key="edu.id" class="relative group animate-fade-in-up opacity-0" :style="{ animationDelay: `${index * 200}ms` }">
+          <div v-if="isLoading" class="text-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-p3-gold mx-auto"></div>
+            <p class="text-p3-gray mt-2">Loading education history...</p>
+          </div>
+          <div v-else-if="error && educationHistory.length === 0" class="text-center py-8">
+            <p class="text-red-400">Error loading education history: {{ error }}</p>
+          </div>
+          <div v-else-if="educationHistory.length === 0" class="text-center py-8">
+            <p class="text-p3-gray">No education history found.</p>
+          </div>
+          <div v-else v-for="(edu, index) in educationHistory" :key="edu.id" class="relative group animate-fade-in-up opacity-0" :style="{ animationDelay: `${index * 200}ms` }">
             <div class="absolute top-1/2 -left-10 md:-left-16 h-0.5 w-10 md:w-16 bg-p3-blue-light/50 group-hover:bg-p3-gold transition-colors duration-300" aria-hidden="true"></div>
             <div class="absolute top-1/2 -left-10 md:-left-16 w-4 h-4 bg-p3-gold group-hover:bg-p3-white transition-colors duration-300"
                  style="transform: translate(-50%, -50%); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);"
