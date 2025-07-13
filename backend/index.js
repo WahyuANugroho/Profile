@@ -4,7 +4,7 @@ const cors = require('cors');
 const { neon } = require('@neondatabase/serverless');
 
 const app = express();
-const sql = neon(process.env.DATABASE_URL);
+const sql = neon(process.env.DATABASE_URL_CUSTOM || process.env.DATABASE_URL);
 
 app.use(cors());
 app.use(express.json());
