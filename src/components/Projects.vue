@@ -15,7 +15,9 @@ const getImageUrl = (imageName) => {
   if (!imageName) {
     return 'https://via.placeholder.com/400x200.png?text=No+Image';
   }
-  return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
+  // Paksa ekstensi .webp
+  const webpName = imageName.replace(/\.png$/i, '.webp');
+  return new URL(`/src/assets/images/${webpName}`, import.meta.url).href;
 };
 
 onMounted(async () => {
@@ -61,6 +63,7 @@ onMounted(async () => {
             <img
               :src="getImageUrl(project.image)"
               :alt="'Gambar ' + project.title"
+              loading="lazy"
               class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300 bg-p3-blue-dark"
             >
           </div>

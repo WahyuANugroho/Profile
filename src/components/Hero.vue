@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import profileImage from '@/assets/profile.png';
+import profileImage from '@/assets/profile.webp';
 
 const nameText = ref('');
 const isTyping = ref(true);
@@ -25,6 +25,7 @@ onMounted(() => { setTimeout(() => { typeName(); }, 200); });
         <img
           :src="profileImage"
           alt="Foto Profil"
+          loading="lazy"
           class="absolute bottom-0 right-0 h-full w-auto object-contain object-bottom"
           style="filter: grayscale(1) contrast(1.2); mix-blend-mode: screen;"
         >
@@ -37,6 +38,7 @@ onMounted(() => { setTimeout(() => { typeName(); }, 200); });
       <img
         :src="profileImage"
         alt="Foto Profil"
+        loading="lazy"
         class="w-full h-full object-cover object-top"
       >
       <div class="absolute inset-0 bg-gradient-to-t from-p3-blue-dark via-p3-blue-dark/60 to-transparent"></div>

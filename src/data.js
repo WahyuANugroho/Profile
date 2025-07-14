@@ -18,14 +18,14 @@ export const skills = [
 export const projects = [
     {
         title: 'Lucien Avenue',
-        image: 'project1.png',
+        image: 'project1.webp',
         description: 'Platform yang menjual sepatu branded dengan fitur keranjang belanja, dibangun untuk skalabilitas dan performa tinggi.',
         tech: ['Vue.js', 'Laravel', 'PostgreSQL'],
         link: 'https://github.com/GITikhsan/LUCIEN-AVENUE-FRONTEND'
     },
     {
         title: 'Elysia Assistant',
-        image: 'project2.png',
+        image: 'project2.webp',
         description: 'Chatbot asisten yang terintegrasi dengan model AI secara lokal.',
         tech: ['Kotlin', 'Llama', 'ONNX'],
         link: 'https://github.com/WahyuANugroho/Elysia_Assistant'
