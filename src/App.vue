@@ -17,6 +17,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <a href="#main-content" class="sr-only focus:not-sr-only bg-p3-gold text-p3-blue-dark font-bold px-4 py-2 absolute z-50">Skip to content</a>
   <div class="bg-p3-blue-dark font-body text-p3-white">
     <Transition name="fade"><LoadingScreen v-if="isLoading" /></Transition>
 

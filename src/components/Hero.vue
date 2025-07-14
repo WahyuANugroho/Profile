@@ -25,7 +25,6 @@ onMounted(() => { setTimeout(() => { typeName(); }, 200); });
         <img
           :src="profileImage"
           alt="Foto Profil"
-          loading="lazy"
           class="absolute bottom-0 right-0 h-full w-auto object-contain object-bottom"
           style="filter: grayscale(1) contrast(1.2); mix-blend-mode: screen;"
         >

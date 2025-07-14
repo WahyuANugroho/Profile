@@ -8,7 +8,7 @@ const Education = defineAsyncComponent(() => import('@/components/Education.vue'
 const Contact = defineAsyncComponent(() => import('@/components/Contact.vue'));
 </script>
 <template>
-  <main>
+  <main id="main-content">
     <Hero />
     <div v-animate-on-scroll><Skills /></div>
     <div v-animate-on-scroll><Projects /></div>
