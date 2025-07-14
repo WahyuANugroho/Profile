@@ -46,7 +46,7 @@ onMounted(() => { setTimeout(() => { typeName(); }, 200); });
     <div class="relative flex flex-col justify-center min-h-screen w-full md:pl-12">
       <div class="absolute top-8 left-0 md:left-12 transform -skew-x-12">
         <div class="bg-p3-gold text-p3-blue-dark px-4 py-1 font-bold text-xl">Lv 99</div>
-        <div class="bg-p3-blue-dark text-p3-white px-4 py-1 font-heading text-lg">The Leviathan</div>
+        <div class="bg-p3-blue-dark text-p3-white px-4 py-1 font-heading text-lg">ShiroMity</div>
       </div>
       <div class="mt-auto md:mt-0 mb-20 md:mb-0">
         <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold text-p3-white my-1 min-h-[68px] md:min-h-[88px]">
@@ -55,7 +55,7 @@ onMounted(() => { setTimeout(() => { typeName(); }, 200); });
         </h1>
         <div class="w-full h-px bg-p3-gold my-6 md:my-8 md:w-2/3"></div>
         <p class="font-body max-w-lg text-base md:text-lg animate-text-focus-in opacity-0" style="animation-delay: 500ms;">
-          Mahasiswa Informatika dengan semangat pada pengembangan web dan desain antarmuka, menciptakan pengalaman digital yang intuitif dan modern.
+          Mahasiswa Informatika dengan semangat pada android development dan UI/UX, menciptakan pengalaman digital yang intuitif dan modern.
         </p>
       </div>
     </div>

@@ -1,0 +1,19 @@
+<svg width="640" height="640" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lingkaran emas -->
+  <circle cx="160" cy="160" r="90" fill="#fff" stroke="#F7B733" stroke-width="14"/>
+  <!-- Lingkaran hitam -->
+  <circle cx="160" cy="160" r="70" fill="#040D21" stroke="#00A9E0" stroke-width="7"/>
+  <!-- Simbol S.E.E.S. (seperti radioaktif, dua segitiga putih, dua hitam, membentuk +) -->
+  <!-- Segitiga putih atas -->
+  <path d="M160 160 L160 100 L180 130 Z" fill="#fff"/>
+  <!-- Segitiga putih bawah -->
+  <path d="M160 160 L160 220 L140 190 Z" fill="#fff"/>
+  <!-- Segitiga hitam kiri -->
+  <path d="M160 160 L100 160 L130 180 Z" fill="#040D21"/>
+  <!-- Segitiga hitam kanan -->
+  <path d="M160 160 L220 160 L190 140 Z" fill="#040D21"/>
+  <!-- Lingkaran kecil biru di kiri -->
+  <circle cx="120" cy="160" r="7" fill="#00A9E0"/>
+  <!-- Lingkaran kecil kuning di kanan -->
+  <circle cx="200" cy="160" r="7" fill="#F7B733"/>
+</svg>
