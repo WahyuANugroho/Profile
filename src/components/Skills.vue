@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// Fallback data
 import { skills as localSkills } from '../data.js';
 
 const skills = ref([]);
@@ -14,14 +13,10 @@ const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
 onMounted(async () => {
   isLoading.value = true;
   try {
-    console.log('Fetching skills data from backend...');
     const response = await axios.get(`${API_URL}/skills`);
     skills.value = response.data;
-    console.log('Skills data loaded from backend:', response.data);
   } catch (err) {
-    console.warn('Backend not available, using local data:', err.message);
-    error.value = err.message;
-    // Fallback to local data
+    error.value = err.message || 'Failed to fetch skills from backend.';
     skills.value = localSkills;
   } finally {
     isLoading.value = false;

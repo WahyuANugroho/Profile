@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// Fallback data
 import { educationHistory as localEducationHistory } from '../data.js';
 
 const educationHistory = ref([]);
@@ -14,21 +13,16 @@ const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
 onMounted(async () => {
   isLoading.value = true;
   try {
-    console.log('Fetching education data from backend...');
     const response = await axios.get(`${API_URL}/education`);
     educationHistory.value = response.data;
-    console.log('Education data loaded from backend:', response.data);
   } catch (err) {
-    console.warn('Backend not available, using local data:', err.message);
-    error.value = err.message;
-    // Fallback to local data
+    error.value = err.message || 'Failed to fetch education history from backend.';
     educationHistory.value = localEducationHistory;
   } finally {
     isLoading.value = false;
   }
 });
 </script>
-
 <template>
   <section id="pendidikan" class="relative min-h-screen bg-p3-blue-dark p-4 md:p-8 flex flex-col justify-center overflow-hidden">
     <div class="absolute -right-8 bottom-8 text-[9rem] md:text-[13rem] font-black text-p3-white/5 select-none z-0 leading-none">
