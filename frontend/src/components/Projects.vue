@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import SectionTitle from './SectionTitle.vue';
-// Fallback data
 import { projects as localProjects } from '../data.js';
 
 const projects = ref([]);
@@ -22,14 +21,10 @@ const getImageUrl = (imageName) => {
 onMounted(async () => {
   isLoading.value = true;
   try {
-    console.log('Fetching projects data from backend...');
     const response = await axios.get(`${API_URL}/projects`);
     projects.value = response.data;
-    console.log('Projects data loaded from backend:', response.data);
   } catch (err) {
-    console.warn('Backend not available, using local data:', err.message);
-    error.value = err.message;
-    // Fallback to local data
+    error.value = err.message || 'Failed to fetch projects from backend.';
     projects.value = localProjects;
   } finally {
     isLoading.value = false;
